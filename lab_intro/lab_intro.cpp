@@ -70,16 +70,18 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
       int absY = abs(distY);
       double totDist = sqrt(pow(absX,2)+pow(absY,2));
       double perDec = (0.5 * totDist) / 100;
-      if ((x != centerX) && (y != centerY)){
-        if (totDist > 160){
+      if (distX == 0 && distY == 0){
+        pixel.l = pixel.l;
+      }
+      else{
+        if (perDec >= 0.8){
           pixel.l = 0.2*pixel.l;
         }
         else{
           pixel.l = (1-perDec)*pixel.l;
         }
       }
-      
-      }
+    }
   }
   return image;
   
