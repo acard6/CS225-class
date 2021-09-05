@@ -102,21 +102,21 @@ PNG illinify(PNG image) {
   for (unsigned x = 0; x < image.width(); x++) {
     for (unsigned y = 0; y < image.height(); y++) {
       HSLAPixel & pixel = image.getPixel(x, y);
-      if (216 < pixel.h) {
+      if (pixel.h > 216) {
         double a = (pixel.h) - 216;
-        double b = 317 - pixel.h;
+        double b = 371 - pixel.h;
         if (abs(a) > abs(b))
-          pixel.h = 216;
-        else
           pixel.h = 11;
+        else
+          pixel.h = 216;
       }
       if (pixel.h < 216) {
-        double a = pixel.h - 216;
-        double b = 317 - pixel.h;
+        double a = 216 - pixel.h;
+        double b = pixel.h - 11;
         if (abs(a) > abs(b))
-          pixel.h = 216;
-        else
           pixel.h = 11;
+        else
+          pixel.h = 216;
       }
     }
   }
