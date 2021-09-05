@@ -13,9 +13,10 @@
 namespace cs225 {
     class HSLAPixel{
         public:
-            double h; // the hue value of the pixel from [0,360]
-            double s; // the saturation of the pixel from [0,1]
-            double l; // the luminance of the pixel from [0,1]
-            double a; // the alpha channel or transparancy of the pixel from [0,1]
-    }
+            double h,s,l,a;
+            HSLAPixel();
+            HSLAPixel(double A, double B, double C);
+            HSLAPixel(double A, double B, double C, double D);
+
+    };
 }
