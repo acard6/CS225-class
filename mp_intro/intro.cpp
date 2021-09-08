@@ -13,10 +13,11 @@ void rotate(std::string inputFile, std::string outputFile) {
 
   cs225::PNG* output = new cs225::PNG(width, height);
 
-  for (unsigned x=0; x <= width; x++){
-    for (unsigned y=0; y <= height; y++){
-      cs225::HSLAPixel& curr = original->getPixel(x, y);
-      cs225::HSLAPixel& currOutPixel = (*output).getPixel((width - x), (height - y));
+  for (unsigned x = 0; (x < width); x++) {
+      for (unsigned y = 0; (y < height); y++) {
+        cs225::HSLAPixel& curr = original->getPixel(x, y);
+        cs225::HSLAPixel& currOutPixel = (*output).getPixel((width - 1 - x), (height - 1 - y));
+        currOutPixel = curr;
     }
   }
   output->writeToFile(outputFile);
