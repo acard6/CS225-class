@@ -5,7 +5,21 @@
 
 
 void rotate(std::string inputFile, std::string outputFile) {
-  // TODO: Part 2
+  cs225::PNG* original = new cs225::PNG; //Allocated memory to the pointer
+
+  original-> readFromFile(inputFile);
+  unsigned width = original->width();
+  unsigned height = original->height();
+
+  cs225::PNG* output = new cs225::PNG(width, height);
+
+  for (unsigned x=0; x <= width; x++){
+    for (unsigned y=0; y <= height; y++){
+      cs225::HSLAPixel& curr = original->getPixel(x, y);
+      cs225::HSLAPixel& currOutPixel = (*output).getPixel((width - x), (height - y));
+    }
+  }
+  output->writeToFile(outputFile);
 }
 
 cs225::PNG myArt(unsigned int width, unsigned int height) {
