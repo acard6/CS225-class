@@ -61,9 +61,9 @@ void Room::print(std::ostream & stream /* = std::cout */)
 
 void Room::clear()
 {
-    if (letters != NULL)
-
-        delete letters;
+    if (letters != NULL){
+        delete[] letters;
+    }
 }
 
 void Room::copy(const Room& other)
@@ -72,6 +72,9 @@ void Room::copy(const Room& other)
     capacity = other.capacity;
     count = other.count;
     letterCount = other.letterCount;
-    letters = other.letters;
+    letters = new Letter[26];
+    for (int i=0; i<26;i++){
+        letters[i] = other.letters[i];
+    }
 
 }
