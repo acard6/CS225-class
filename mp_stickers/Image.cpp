@@ -159,23 +159,25 @@ void Image::saturate(double amount){
     }
 }
 
-void Image::rotateColor(double amount){
+void Image::rotateColor(double degree){
     for (unsigned int x=0; x<width(); x++){
         for (unsigned int y=0; y<height(); y++){
             HSLAPixel & pixel = getPixel(x,y);
-            pixel.h = ((360 + pixel.h - amount) % 360);
+            pixel.h += degree;
+            while (pixel.h < 360) pixel.h +=360;
+            while (pixel.h > 360) pixel.h -=360;
         }
     }
 }
 
 void Image::scale(double factor){
     Image * ImageCopy = this;
-    unsigned newWidth = factor * width;
-    unsigned newHeight = factor * height;
+    unsigned newWidth = factor * width();
+    unsigned newHeight = factor * height();
     resize(newWidth, newHeight);
 }
 
-void Imgae::scale(unsigned w, unsigned h){
+void Image::scale(unsigned w, unsigned h){
     unsigned widthRatio =  w / width();
     unsigned heightRatio = h / height();
 }
