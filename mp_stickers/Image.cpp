@@ -125,7 +125,7 @@ void Image::lighten(double amount){
                 pixel.l = 1;
             }
             else{
-                pixel.l += 0.1;
+                pixel.l += amount;
             }
         }
     }
@@ -172,12 +172,28 @@ void Image::rotateColor(double degree){
 
 void Image::scale(double factor){
     Image * ImageCopy = this;
-    unsigned newWidth = factor * width();
-    unsigned newHeight = factor * height();
+    unsigned int newWidth = factor * width();
+    unsigned int newHeight = factor * height();
     resize(newWidth, newHeight);
+    for (unsigned int x=0; x<newWidth; x++){
+        for (unsigned int y=0; y<newHeight; y++){
+            HSLAPixel & newPixel = getPixel(x,y);
+            unsigned newX = x / factor;
+            unsigned newY = y / factor;
+            HSLAPixel & oldPixel = ImageCopy->getPixel(newX,newY);
+            newPixel = oldPixel;
+        
+        }
+    }
 }
 
 void Image::scale(unsigned w, unsigned h){
-    unsigned widthRatio =  w / width();
-    unsigned heightRatio = h / height();
+    double widthFactor =  (1.0 * w) / width();
+    double heightFactor = (1.0 * h )/ height();
+    if (widthFactor > heightFactor){
+        scale(heightFactor);
+    }
+    else{
+        scale(widthFactor);
+    }
 }
