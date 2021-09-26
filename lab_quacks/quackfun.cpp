@@ -103,6 +103,43 @@ void scramble(queue<T>& q)
     stack<T> s;
     queue<T> q2;
 
+    unsigned size = 1;
+    while(!q.empty()){
+        if (size == 1){
+            q2.push(q.front());
+            q.pop();
+        }
+        else if (size % 2 == 0){
+            if (size > q.size()){
+                size = q.size();
+            }
+            for (unsigned int i=0; i<size; i++){
+                s.push(q.front());
+                q.pop();
+            }
+            for (unsigned int j=0; j<size; j++){
+                q2.push(s.top());
+                s.pop();
+            }
+            
+        }
+        else if (size % 2 == 1){
+            if (size > q.size()){
+                size = q.size();
+            }
+            for (unsigned int i=0; i< size; i++){
+                q2.push(q.front());
+                q.pop();
+            }
+        }
+        size++;
+
+    }
+    size = q2.size();
+    for (unsigned int i=0; i<size; i++){
+        q.push(q2.front());
+        q2.pop();
+    }
     
 }
 }
