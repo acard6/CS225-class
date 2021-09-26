@@ -14,7 +14,7 @@ StickerSheet::StickerSheet(const Image &picture, unsigned max)
 {
     max_ = max;
     basePicture_ = picture;
-    vector<Image*> scene_;
+    vector<Image*> scene_(max_);
     vector<vector<int>> coord_ (max_,vector<int>(2));
     stickers = 0;
     
@@ -49,7 +49,7 @@ int StickerSheet::addSticker(Image&sticker,unsigned x, unsigned y)
     unsigned tmp = stickers;
     if( tmp < max_){
         for (int i=0; i<stickers; i++){
-            if (scene_[i] == nullptr){
+            if (scene_[i] == NULL){
                 scene_[i] = &sticker;
                 coord_[i][0] = x;
                 coord_[i][1] = y;
@@ -107,11 +107,11 @@ Image StickerSheet::render() const
     newBase.resize(baseWidth, baseHeight);
 
     for (unsigned i=0; i<scene_.size(); i++){
-        if (scene_[i] != NULL){
-            for (unsigned x = coord_[i][0]; x < baseWidth; x++){
-                for (unsigned y = coord_[i][1]; y < baseHeight; y++){
-                    if (scene_[i]->getPixel(x-coord_[i][0], y-coord_[i][1]).a != 0){
-                        newBase.getPixel(x,y) = scene_[i]->getPixel(x-coord_[i][0], y-coord_[i][1]);
+        if (scene_[i] != nullptr){
+            for (unsigned x = coord_[i][0]; x < (coord_[i][0]+scene_[i]->width()); x++){
+                for (unsigned y = coord_[i][1]; y < (coord_[i][1]+scene_[i]->height()); y++){
+                    if (scene_[i]->getPixel((x-coord_[i][0]), (y-coord_[i][1])).a != 0){
+                        newBase.getPixel(x,y) = scene_[i]->getPixel((x-coord_[i][0]), (y-coord_[i][1]));
                     } 
                 }
             }

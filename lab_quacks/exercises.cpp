@@ -22,8 +22,15 @@
  */
 int RecursionExercises::sumDigits(int n)
 {
-
-    return -1;
+    if (n > 0){
+        int rightDigit = n % 10;
+        int m = n / 10;
+        int summation = sumDigits(m) + rightDigit;
+        return summation;
+    }
+    else{
+        return 0;
+    }
 }
 
 /**
@@ -45,6 +52,11 @@ int RecursionExercises::sumDigits(int n)
  */
 int RecursionExercises::triangle(int rows)
 {
-
-    return -1;
+    if (rows > 0){    
+        int sum = triangle(rows-1) + rows;
+        return sum;   
+    }
+    else{
+        return 0;
+    }
 }
