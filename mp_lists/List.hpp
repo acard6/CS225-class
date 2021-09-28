@@ -17,7 +17,7 @@ List<T>::List() {
 template <typename T>
 typename List<T>::ListIterator List<T>::begin() const {
   // @TODO: graded in MP3.1
-  return List<T>::ListIterator(NULL);
+  return List<T>::ListIterator(head_);
 }
 
 /**
@@ -26,7 +26,7 @@ typename List<T>::ListIterator List<T>::begin() const {
 template <typename T>
 typename List<T>::ListIterator List<T>::end() const {
   // @TODO: graded in MP3.1
-  return List<T>::ListIterator(NULL);
+  return List<T>::ListIterator(tail_);
 }
 
 
@@ -150,6 +150,27 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
 template <typename T>
 void List<T>::tripleRotate() {
   // @todo Graded in MP3.1
+  int triplets =  length_ % 3;
+  int groups = (length_ - triplets) /3;
+  
+  ListNode * first;
+  ListNode * second;
+  ListNode * third;
+  for (int i=0, i< groups; i++){
+    if (i == 0){
+      first = this->begin();
+    }
+    else{
+      ListNode * temp = this.begin();
+      for (int j=0; j<(i*3)<j++){
+        first = temp->next;
+        temp = temp ->next;
+      }
+    }
+    second = first->next;
+    third = second->next;
+  }
+  
 }
 
 
