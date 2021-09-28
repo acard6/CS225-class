@@ -156,13 +156,13 @@ void List<T>::tripleRotate() {
   ListNode * first;
   ListNode * second;
   ListNode * third;
-  for (int i=0, i< groups; i++){
+  for (int i=0; i< groups; i++){
     if (i == 0){
-      first = this->begin();
+      first = head_;
     }
     else{
-      ListNode * temp = this.begin();
-      for (int j=0; j<(i*3)<j++){
+      ListNode * temp = head_;
+      for (int j=0; j<(i*3);j++){
         first = temp->next;
         temp = temp ->next;
       }
