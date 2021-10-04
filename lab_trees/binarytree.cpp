@@ -78,9 +78,27 @@ void BinaryTree<T>::printLeftToRight(const Node* subRoot) const
     template <typename T>
 void BinaryTree<T>::mirror()
 {
-    //your code here
+    mirror(root);
 }
 
+    template <typename T>
+void BinaryTree<T>::mirror(Node* subroot){
+    if (subroot == NULL){
+        return;
+    }
+    
+    //swapping the children
+    Node* temp = subroot->left;
+    subroot->left = subroot->right;
+    subroot->right = temp;
+
+
+    mirror(subroot->left);
+    mirror(subroot->right);
+
+        
+
+}
 
 /**
  * isOrdered() function iterative version
@@ -92,7 +110,19 @@ template <typename T>
 bool BinaryTree<T>::isOrderedIterative() const
 {
     // your code here
-    return false;
+    InorderTraversal<T> iot(root);
+    typename TreeTraversal<T>::Iterator it = iot.begin();
+    T prev = (*it)->elem;
+    ++it;
+    while (it != iot.end()){
+        T curr = (*it)->elem; 
+        if (curr < prev){
+            return false;
+        }
+        prev = curr;
+        ++it;
+    }
+    return true;
 }
 
 /**
@@ -105,6 +135,21 @@ template <typename T>
 bool BinaryTree<T>::isOrderedRecursive() const
 {
     // your code here
+    return isOrderedRecursive(root, INT_MIN, INT_MAX);
+}
+
+template <typename T>
+bool BinaryTree<T>::isOrderedRecursive(const Node* node, T min, T max) const{
+    if (node == NULL){
+        return true;
+    }
+    else if (node->elem < min || node->elem > max){
+        return false;
+    }
+    else{ 
+        return (isOrderedRecursive(node->left,min,node->elem) && isOrderedRecursive(node->right,node->elem,max));
+    }
+
     return false;
 }
 

@@ -158,6 +158,8 @@ class BinaryTree
          *  as examples.
          */
 
+        void mirror( Node* subroot);
+
         /**
          * Private helper function for the public height function.
          * @param subRoot The current node in the recursion
@@ -207,6 +209,8 @@ class BinaryTree
          * @param treeVector stores nodes in order
          */
         void inOrder(Node *subRoot, std::vector<T>& treeVector);
+
+        bool isOrderedRecursive(const Node* node, T min, T max) const;
 };
 
 #include "binarytree_given.cpp"

@@ -9,7 +9,7 @@ int main() {
     // For deterministic behavior, use a fixed seed instead of a random device
     std::random_device r;
     std::mt19937 rng(r());
-
+    
     BinaryTree<int> myTree;
     for (int i = 1; i <= 10; i++)
         myTree.insertRandom(i, rng);

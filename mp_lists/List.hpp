@@ -8,6 +8,7 @@ List<T>::List() {
   // @TODO: graded in MP3.1
     head_ = NULL;
     tail_ = NULL;
+    length_ = 0;
 }
 
 /**
@@ -74,7 +75,7 @@ void List<T>::insertFront(T const & ndata) {
   }
   
 
-  length_++;
+  length_ = length_ + 1;
 
 }
 
@@ -101,7 +102,7 @@ void List<T>::insertBack(const T & ndata) {
     head_ = newNode;
   }
 
-  length_++;
+  length_ = length_ + 1;
 }
 
 /**
@@ -150,27 +151,33 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
 template <typename T>
 void List<T>::tripleRotate() {
   // @todo Graded in MP3.1
-  int triplets =  length_ % 3;
-  int groups = (length_ - triplets) /3;
-  
   ListNode * first;
   ListNode * second;
   ListNode * third;
-  for (int i=0; i< groups; i++){
-    if (i == 0){
-      first = head_;
-    }
-    else{
-      ListNode * temp = head_;
-      for (int j=0; j<(i*3);j++){
-        first = temp->next;
-        temp = temp ->next;
-      }
-    }
-    second = first->next;
-    third = second->next;
-  }
+  ListNode * temp = *&head_;
   
+  int triplets =  length_ % 3;
+  int groups = (length_ - triplets) /3;
+  if (groups > 0){  
+    for (int i=0; i< groups; i++){
+      if (i == 0){
+        first = *&head_;
+      }
+      else{
+        for (int j=0; j<(i*3);j++){
+          first = temp->next;
+          temp = temp ->next;
+        }
+      }
+      second = *&first->next;
+      third = *&second->next;
+
+      temp = first;
+      first = second;
+      second = third;
+      third = temp; 
+    }
+  }
 }
 
 
