@@ -163,12 +163,26 @@ void List<T>::tripleRotate() {
   for (int i=0; i<blocks; i++){
     middle = start->next;
     end = middle->next;
-    temp = end;
+    temp = end->next;
+
+    if (start->prev != NULL){
+      start->prev->next = middle;
+    }
 
     middle->prev = start->prev;
     start->next = end->next;
     start->prev = end;
     end->next = start;
+
+    if (temp != NULL){
+      temp->prev = start;
+    }
+    if (start == head_){
+      head_ = middle;
+    }
+    if (end == tail_){
+      tail_ = start;
+    }
 
     start = temp;
   }
