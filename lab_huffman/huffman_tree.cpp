@@ -83,7 +83,28 @@ HuffmanTree::removeSmallest(queue<TreeNode*>& singleQueue,
      * smaller of the two queues heads is the smallest item in either of
      * the queues. Return this item after removing it from its queue.
      */
-    return NULL;
+    TreeNode* top;
+
+    if (singleQueue.empty()){
+        top = mergeQueue.front();
+        mergeQueue.pop();
+    }
+
+    else if (mergeQueue.empty()){
+        top = singleQueue.front();
+        singleQueue.pop();
+    }
+
+    else if (mergeQueue.front()->freq < singleQueue.front()->freq) {
+        top = mergeQueue.front();
+        mergeQueue.pop();
+    }
+    else {
+        top = singleQueue.front();
+        singleQueue.pop();
+        }
+
+    return top;
 }
 
 void HuffmanTree::buildTree(const vector<Frequency>& frequencies)
@@ -109,6 +130,42 @@ void HuffmanTree::buildTree(const vector<Frequency>& frequencies)
      * to the root and you're done!
      */
 
+    //adding the leaf nodes onto the queue
+    for (unsigned int i=0; i<frequencies.size();i++){
+        TreeNode* leaf = new TreeNode(frequencies[i]);
+        singleQueue.push(leaf);
+    }
+
+    //until there is one queue with a single node and the other is empty
+    while (singleQueue.size() + mergeQueue.size() > 1)  {
+        
+        //removing the two smallest nodes
+        TreeNode* left = removeSmallest(singleQueue, mergeQueue);
+        TreeNode* right = removeSmallest(singleQueue, mergeQueue);
+        
+        //merging the left and right into a single TreeNode
+        int frequency= left->freq.getFrequency() + right->freq.getFrequency();
+        TreeNode* merge = new TreeNode(frequency);
+        merge->left = left;
+        merge->right = right;
+        mergeQueue.push(merge);
+    }
+
+    if (mergeQueue.empty()){
+        root_ = singleQueue.front();
+    }else{
+        root_ = mergeQueue.front();
+    }
+    /**
+    if (!singleQueue.empty()){
+        root_ = singleQueue.front();
+        singleQueue.pop();
+    }
+    else{
+        root_ = mergeQueue.front();
+        mergeQueue.pop();
+    }
+    */
 }
 
 string HuffmanTree::decodeFile(BinaryFileReader& bfile)
@@ -133,6 +190,20 @@ void HuffmanTree::decode(stringstream& ss, BinaryFileReader& bfile)
          * character to the stringstream (with operator<<, just like cout)
          * and start traversing from the root node again.
          */
+        //traverses through the right side: .gNB() == 1
+        if (bfile.getNextBit() == 1) {
+            current = current->right;
+        }
+        //traverses through the left side: .gNB() == 0
+        else{
+            current = current->left;
+        }
+
+        if (!current->right && !current->left){
+            char character = current->freq.getCharacter();
+            ss <<  character;
+            current = root_;    
+        }        
     }
 }
 
@@ -158,6 +229,16 @@ void HuffmanTree::writeTree(TreeNode* current, BinaryFileWriter& bfile)
      * version: this is fine, as the structure of the tree still reflects
      * what the relative frequencies were.
      */
+    if (current == NULL){return;}
+    if (current->left==NULL && current->right==NULL){
+        bfile.writeBit(1);
+        bfile.writeByte(current->freq.getCharacter());
+    }
+    else{
+        bfile.writeBit(0);
+        writeTree(current->left, bfile);
+        writeTree(current->right, bfile);
+    }
 }
 
 HuffmanTree::TreeNode* HuffmanTree::readTree(BinaryFileReader& bfile)
@@ -179,7 +260,21 @@ HuffmanTree::TreeNode* HuffmanTree::readTree(BinaryFileReader& bfile)
      *         if it did not create one.
      */
 
-    return NULL;
+    while (bfile.hasBits()) {
+        if (bfile.getNextBit()){
+            Frequency f(bfile.getNextByte(), 0);
+            TreeNode* node = new TreeNode(f);
+            return node;
+        }
+        else {
+            TreeNode* node = new TreeNode(0);
+            node->left = readTree(bfile);
+            node->right = readTree(bfile);
+            return node;
+        }
+
+    }
+    return NULL;   
 }
 
 void HuffmanTree::buildMap(TreeNode* current, vector<bool>& path)
