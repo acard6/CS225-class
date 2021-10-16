@@ -95,7 +95,7 @@ void AVLTree<K, V>::rebalance(Node*& subtree)
     if (subtree->left != NULL){
         subtree->left->height = std::max(heightOrNeg1(subtree->left->right), heightOrNeg1(subtree->left->left)) + 1;
     }
-    else if (subtree->right != NULL){
+    if (subtree->right != NULL){
         subtree->right->height = std::max(heightOrNeg1(subtree->right->right), heightOrNeg1(subtree->right->left)) + 1;
     }
     subtree->height = std::max(heightOrNeg1(subtree->right),heightOrNeg1(subtree->left)) + 1;
@@ -140,9 +140,11 @@ void AVLTree<K, V>::remove(Node*& subtree, const K& key)
     if (key < subtree->key) {
         // your code here
         remove(subtree->left, key);
+        rebalance(subtree);
     } else if (key > subtree->key) {
         // your code here
         remove(subtree->right, key);
+        rebalance(subtree);
     } else {
         if (subtree->left == NULL && subtree->right == NULL) {
             /* no-child remove */
@@ -157,21 +159,17 @@ void AVLTree<K, V>::remove(Node*& subtree, const K& key)
             while (IOTP->right != NULL){
                 IOTP = IOTP->right;
             }
-            subtree->key = IOTP->key;
-            subtree->value = IOTP->value;
-            remove(subtree->left, IOTP->key);
+            swap(subtree, IOTP);
+            remove(subtree->left, key);
+            rebalance(IOTP);
 
         } else {
             /* one-child remove */
             // your code here
-            Node* temp = subtree;
-            if (subtree->left == NULL){
-                //the lone child is on the right
-                subtree =  subtree->right;
-            }else {
-                subtree = subtree->right;
-            }
-            delete temp;
+            Node* temp = subtree->left != NULL ? subtree->left : subtree->right;
+            delete subtree;
+            subtree = temp;
+            rebalance(subtree);
         }
         // your code here
         rebalance(subtree);
