@@ -35,4 +35,5 @@ public:
 private:
 	/** @todo [Part 1] */
 	/** add private members here*/
+  void traversal(const PNG& png);
 };
