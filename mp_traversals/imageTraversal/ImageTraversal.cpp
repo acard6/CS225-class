@@ -33,6 +33,9 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
  */
 ImageTraversal::Iterator::Iterator() {
   /** @todo [Part 1] */
+  travel_ = NULL;
+  end = false;
+
 }
 
 /**
@@ -42,7 +45,40 @@ ImageTraversal::Iterator::Iterator() {
  */
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   /** @todo [Part 1] */
-  return *this;
+  unsigned x = current.x;
+  unsigned y = current.y;
+  
+  Point north(x,y-1);
+  Point south(x,y+1);
+  Point east(x+1,y);
+  Point weast(x-1,y);
+
+  if (isValid(east)){
+    travel_->add(east);
+  }if (isValid(south)){
+    travel_->add(south);
+  }if (isValid(weast)){
+    travel_->add(weast);
+  }if (isValid(north)){
+    travel_->add(north);
+  }
+
+  if (!travel_->empty()){
+    Point next = travel_->peek();
+    while (valid[next.x + next.y *png_.width()]){
+      if (travel_->empty()){
+        end = true;
+        return *this;
+      }
+      next = travel_->pop();
+    }
+    current = next;
+    valid[current.x + current.y * png_.width()] = true;
+    return *this;
+  }else{
+    end = true;
+    return *this;
+  }
 }
 
 /**
@@ -52,7 +88,7 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
  */
 Point ImageTraversal::Iterator::operator*() {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  return current;
 }
 
 /**
@@ -62,6 +98,45 @@ Point ImageTraversal::Iterator::operator*() {
  */
 bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other) {
   /** @todo [Part 1] */
-  return false;
+  return (end != other.end);
 }
 
+ImageTraversal::Iterator::Iterator(PNG png, Point start, double tolerance, ImageTraversal* travel) {
+  png_ = png;
+  current = start;
+  start_ = current;
+  tallerants = tolerance;
+  travel_ = travel;
+  end = false;
+
+  for (unsigned i=0; i<png_.width() * png_.height();i++){
+    valid.push_back(false);
+  }
+  if (isValid(current)){
+    valid[current.x + current.y * png_.width()] = true;
+  }
+}
+
+bool ImageTraversal::Iterator::visit(Point p){
+  if (p.x < png_.width() && p.y < png_.height()){
+    return valid[p.x + p.y*png_.width()];
+  }
+  return true;
+}
+
+void ImageTraversal::Iterator::markVisit(Point p){
+  if (p.x < png_.width() && p.y < png_.height()){
+    valid[p.x + p.y*png_.width()] = true;
+  }
+}
+
+bool ImageTraversal::Iterator::isValid(Point p){
+  if (p.x >= png_.width() || p.y >= png_.height()){
+    return false;
+  }
+  if (visit(p)){return false;}
+
+  HSLAPixel start = png_.getPixel(start_.x, start_.y);
+  HSLAPixel curr = png_.getPixel(p.x, p.y);
+  return (calculateDelta(start, curr) <= tallerants);
+}

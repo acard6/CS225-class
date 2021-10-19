@@ -7,8 +7,10 @@
 #include "../cs225/HSLAPixel.h"
 #include "../cs225/PNG.h"
 #include "../Point.h"
+#include <vector>
 
 using namespace cs225;
+using namespace std;
 
 /**
  * A base class for traversal algorithms on images.
@@ -36,11 +38,22 @@ public:
 
     /** @todo [Part 1] */
     /** add member functions if neccesary*/
+    Iterator(PNG png, Point start, double tolerance, ImageTraversal* travel);
+    bool visit(Point p);
+    void markVisit(Point p);
+    bool isValid(Point p);
+    bool end;
 
   private:
     /** @todo [Part 1] */
     /** add private members here if neccesary*/
+    Point start_;
+    PNG png_;
+    double tallerants;
+    Point current;
+    ImageTraversal* travel_;
 
+    vector<bool> valid;
   };
 
   /**

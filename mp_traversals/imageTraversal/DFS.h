@@ -15,6 +15,7 @@
 #include "ImageTraversal.h"
 
 using namespace cs225;
+using namespace std;
 
 /**
  * A depth-first ImageTraversal.
@@ -36,4 +37,8 @@ private:
 	/** @todo [Part 1] */
 	/** add private members here*/
   void traversal(const PNG& png);
+  stack<Point> myStack;
+  PNG png_;
+  Point start_;
+  double tolerance_;
 };

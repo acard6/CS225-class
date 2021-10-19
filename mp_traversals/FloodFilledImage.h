@@ -14,6 +14,10 @@
 #include "Point.h"
 #include "Animation.h"
 
+#include <vector>
+#include <queue>
+#include <stack>
+
 using namespace cs225;
 /**
  * This class is used to do flood fill on an image.
@@ -30,5 +34,8 @@ public:
 private:
 	/** @todo [Part 2] */
 	/** add private members here*/
+  PNG png_;
+  vector<ColorPicker*> colours;
+  vector<ImageTraversal*> traveling;
 
 };

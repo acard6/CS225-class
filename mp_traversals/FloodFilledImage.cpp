@@ -18,6 +18,7 @@ using namespace cs225;
  */
 FloodFilledImage::FloodFilledImage(const PNG & png) {
   /** @todo [Part 2] */
+  png_ = png;
 }
 
 /**
@@ -29,6 +30,8 @@ FloodFilledImage::FloodFilledImage(const PNG & png) {
  */
 void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & colorPicker) {
   /** @todo [Part 2] */
+  traveling.push_back(&traversal);
+  colours.push_back(&colorPicker);
 }
 
 /**
@@ -53,5 +56,23 @@ void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & co
 Animation FloodFilledImage::animate(unsigned frameInterval) const {
   Animation animation;
   /** @todo [Part 2] */
+  animation.addFrame(png_);
+  PNG next = png_;
+
+  for (unsigned i=0; i<traveling.size(); i++){
+    ImageTraversal::Iterator begin = traveling[i]->begin();
+    ImageTraversal::Iterator end = traveling[i]->end();
+
+    unsigned framesWinGames = 0; //because bigger number = better person
+    for (ImageTraversal::Iterator iter = begin; iter != end; ++iter){
+      HSLAPixel &p = next.getPixel((*iter).x,(*iter).y);
+      p = colours[i]->getColor((*iter).x,(*iter).y);
+      framesWinGames++;
+      if (framesWinGames%frameInterval == 0){
+        animation.addFrame(next);
+      }
+    }
+  }
+  animation.addFrame(next);
   return animation;
 }

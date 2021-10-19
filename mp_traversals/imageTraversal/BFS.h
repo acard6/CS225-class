@@ -35,4 +35,8 @@ public:
 private:
   /** @todo [Part 1] */
   /** add private members here*/
+  PNG png_;
+  Point start_;
+  int tolerance_;
+  queue<Point> myQueue;
 };
