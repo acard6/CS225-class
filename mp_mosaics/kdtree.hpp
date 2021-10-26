@@ -5,6 +5,7 @@
 
 #include <utility>
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 
@@ -15,8 +16,11 @@ bool KDTree<Dim>::smallerDimVal(const Point<Dim>& first,
     /**
      * @todo Implement this function!
      */
-
-    return false;
+    if (first[curDim] != second[curDim]){
+      return (first[curDim] < second[curDim]);
+    }else{
+      return (first < second);
+    }
 }
 
 template <int Dim>
@@ -27,8 +31,17 @@ bool KDTree<Dim>::shouldReplace(const Point<Dim>& target,
     /**
      * @todo Implement this function!
      */
-
-     return false;
+    int distFirst = 0; 
+    int distSecond = 0;
+    for (int k = 0; k < Dim; k++){
+      distFirst += pow((target[k] - currentBest[k]),2);
+      distSecond += pow((target[k] - potential[k]),2);
+    }
+    if (distFirst != distSecond){
+      return (distSecond < distFirst);
+    }else{
+      return (potential < currentBest);
+    }
 }
 
 template <int Dim>
@@ -37,6 +50,26 @@ KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
     /**
      * @todo Implement this function!
      */
+    if (newPoints.empty()){
+      //Swallowing load and loads of compiler errors
+      return;
+    }
+    else{
+      //vector<*Point<Dim>> ptrPoints;
+      int middle = floor((newPoints.size() - 1) / 2);
+      Point<Dim> midPoint = newPoints[middle];
+
+    }
+}
+
+template <int Dim>
+vector<Point<Dim>> KDTree<Dim>::KDN(const vector<Point<Dim>>& newPoints, int dim){
+  if (newPoints.size() != 0){
+    return;
+  }
+  else{
+    return;
+  }
 }
 
 template <int Dim>

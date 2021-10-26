@@ -152,6 +152,7 @@ class KDTree
      */
     KDTree(const vector<Point<Dim>>& newPoints);
 
+    vector<Point<Dim>> KDN(const vector<Point<Dim>>& newPoints, int dim);
 
     /**
      * Copy constructor for KDTree.
