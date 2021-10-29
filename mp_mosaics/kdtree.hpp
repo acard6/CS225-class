@@ -55,7 +55,7 @@ KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
       return;
     }
     else{
-      //vector<*Point<Dim>> ptrPoints;
+      vector<*Point<Dim>> ptrPoints;
       int middle = floor((newPoints.size() - 1) / 2);
       Point<Dim> midPoint = newPoints[middle];
 
@@ -64,6 +64,7 @@ KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
 
 template <int Dim>
 vector<Point<Dim>> KDTree<Dim>::KDN(const vector<Point<Dim>>& newPoints, int dim){
+  int d = dim % Dim;
   if (newPoints.size() != 0){
     return;
   }

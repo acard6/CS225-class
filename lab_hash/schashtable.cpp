@@ -54,6 +54,14 @@ void SCHashTable<K, V>::insert(K const& key, V const& value)
      * @todo Implement this function.
      *
      */
+    elems++;
+    if (shouldResize()){
+        resizeTable();
+    }
+
+    unsigned int idx = hashes::hash(key, size);
+    std::pair<K,V> p(key, value);
+    table[idx].push_front(p);
 }
 
 template <class K, class V>
@@ -66,7 +74,15 @@ void SCHashTable<K, V>::remove(K const& key)
      * Please read the note in the lab spec about list iterators and the
      * erase() function on std::list!
      */
-    (void) key; // prevent warnings... When you implement this function, remove this line.
+   
+    elems--;
+    unsigned int idx = hashes::hash(key,size);
+    for (it = table[idx].begin(); it != table[idx].end(); it++) {
+        if (it->first == key){
+            table[idx].erase(it);
+            break;
+        }
+    }
 }
 
 template <class K, class V>
@@ -76,6 +92,13 @@ V SCHashTable<K, V>::find(K const& key) const
     /**
      * @todo: Implement this function.
      */
+    unsigned int idx = hashes::hash(key,size);
+    typename std::list<std::pair<K, V>>::iterator it;
+    for(it=table[idx].begin(); it != table[idx].end(); it++){
+        if (it->first == key){
+            return it->second;
+        }
+    }
 
     return V();
 }
@@ -134,4 +157,18 @@ void SCHashTable<K, V>::resizeTable()
      *
      * @hint Use findPrime()!
      */
+    size_t doubled = size * 2;
+    int nextPrime = findPrime(doubled);
+    std::list<std::pair<K, V>>* newTable = new std::list<std::pair<K, V>>[nextPrime];
+    for (size_t i=0; i<size; i++){
+        typename std::list<std::pair<K, V>>::iterator it;
+        for (it = table[i].begin(); it != table[i].end(); it++){
+            unsigned int idx = hashes::hash(it->first, nextPrime);
+            std::pair<K,V> p(it->first, it->second);
+            newTable[idx].push_front(p);
+        }
+    }
+    size = nextPrime;
+    delete[] table;
+    table = newTable;
 }

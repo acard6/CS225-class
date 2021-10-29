@@ -80,8 +80,35 @@ void LPHashTable<K, V>::insert(K const& key, V const& value)
      * Also, don't forget to mark the cell for probing with should_probe!
      */
 
-    (void) key;   // prevent warnings... When you implement this function, remove this line.
-    (void) value; // prevent warnings... When you implement this function, remove this line.
+
+    
+    ++elems;
+    if (shouldResize()){
+        resizeTable();
+    }    
+    unsigned int i = hashes::hash(key, size);
+    while (table[i] != NULL){
+        i = ++i % size;
+    }
+    table[i] = new std::pair<K, V>(key,value);
+    should_probe[i] = true;
+
+    /*
+    if (table[i] == NULL){
+        *table[i] = value;
+        should_probe[i] = true;
+    }else{
+        bool done = false;
+        unsigned int idx = i + 1;
+        while (!done){
+            if (table[idx % size] == NULL){
+                table[idx % size] = key;
+                done = true
+            }
+            ++idx;
+        }
+    }
+    **/
 }
 
 template <class K, class V>
@@ -90,6 +117,12 @@ void LPHashTable<K, V>::remove(K const& key)
     /**
      * @todo: implement this function
      */
+    int idx = findIndex(key);
+    if (idx != -1){
+        delete table[idx];
+        table[idx] = NULL;
+        elems--;
+    }
 }
 
 template <class K, class V>
@@ -101,7 +134,15 @@ int LPHashTable<K, V>::findIndex(const K& key) const
      *
      * Be careful in determining when the key is not in the table!
      */
-
+    unsigned int idx = hashes::hash(key, size);
+    while (should_probe[idx]){ 
+        if (table[idx] != NULL){
+            if (table[idx]->first == key){
+                return idx;
+            }
+        }
+        idx = (idx + 1) % size;
+    }
     return -1;
 }
 
@@ -159,4 +200,27 @@ void LPHashTable<K, V>::resizeTable()
      *
      * @hint Use findPrime()!
      */
+    size_t twice = size * 2;
+    int nextPrime = findPrime(twice);
+    std::pair<K,V>** newTable = new std::pair<K, V>*[nextPrime];
+    delete[] should_probe;
+    should_probe = new bool[nextPrime];
+    for (int i=0; i<nextPrime; i++){
+        newTable[i] = NULL;
+        should_probe[i] = false;
+    }
+    for (size_t i=0; i<size; i++){
+        if (table[i] != NULL){
+            unsigned int idx = hashes::hash(table[i]->first, nextPrime);
+            while (should_probe[idx]){
+                idx = (idx + 1) % nextPrime;
+            }
+            newTable[idx] = table[i];
+            should_probe[idx] = true;
+
+        }
+    }
+    size = nextPrime;
+    delete[] table;
+    table = newTable;
 }
