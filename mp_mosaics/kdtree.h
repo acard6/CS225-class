@@ -152,8 +152,6 @@ class KDTree
      */
     KDTree(const vector<Point<Dim>>& newPoints);
 
-    vector<Point<Dim>> KDN(const vector<Point<Dim>>& newPoints, int dim);
-
     /**
      * Copy constructor for KDTree.
      *
@@ -260,6 +258,18 @@ class KDTree
     /**
      * @todo Add your helper functions here.
      */
+
+    KDTreeNode* KDhelper(vector<Point<Dim>>& newPoints,int start, int end, int plane);
+
+    Point<Dim> quick_select(vector<Point<Dim>>& newPoints, int start, int end, int k, int plane);
+
+    int partition(vector<Point<Dim>>& newPoints, int start, int end, int piv, int plane);
+
+    void copy_(const KDTreeNode* subroot, KDTreeNode* other);
+    void delete_(KDTreeNode* subroot);
+    
+    void WontYouBeMyNeighbor(const KDTreeNode* kdNode, const Point<Dim>& query, 
+    Point<Dim>& currentBest, int plane) const;
 };
 
 #include "kdtree.hpp"
