@@ -9,5 +9,9 @@ int main()
 {
     // Write your own main here
     cout << "Add your own tests here! Modify main.cpp" << endl;
+
+    DisjointSets set;
+    set.addelements(5);
+    cout << set.elemSet.size() << endl;
     return 0;
 }
