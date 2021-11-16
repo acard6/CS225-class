@@ -1,5 +1,5 @@
 
-/**
+
 #include "../cs225/catch/catch.hpp"
 #include <iostream>
 #include <fstream>
@@ -351,5 +351,5 @@ TEST_CASE("testDrawSolutionLarge", "[weight=10][part2][timeout=30000]")
 	REQUIRE(*actualOutput == solnImage);
 	delete actualOutput;
 }
- */
+ 
 
